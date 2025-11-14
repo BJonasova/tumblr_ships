@@ -259,4 +259,76 @@ def analyze_media_longevity(df):
         })
         
         print(longevity_summary)
+
+def analyze_yearly_fandom_popularity(df):
+    """
+    Analyzes the popularity of original Fandoms for each year, measured by 
+    the total number of unique ships present in the ranking list that year.
+    """
+    print("\n### Yearly Fandom Popularity (by Unique Ship Count) ###")
+    
+    # grouped by fandom and year
+    yearly_fandom_counts = df.groupby(['Year', 'Fandom']).size().reset_index(name='Total Ships in Fandom')
+    
+    # unique years in the dataset
+    all_years = sorted(df['Year'].unique())
+    
+    for year in all_years:
+        # for the current year
+        year_data = yearly_fandom_counts[yearly_fandom_counts['Year'] == year]
+        
+        # sort by number of ships and print top 5
+        print(f"\n--- Top Fandoms in {year} (by # of ships ranked) ---")
+        
+        print(year_data[['Fandom', 'Total Ships in Fandom']]
+                  .sort_values(by='Total Ships in Fandom', ascending=False)
+                  .head(10)
+                  .reset_index(drop=True))
+
+def analyze_peak_amount(df):
+    """
+    Analyzes which Fandoms have the highest cumulative number of ranked ships 
+    when considering their top N most successful years (N=1, N=2, N=3, etc.).
+    
+    The metric is the sum of ships ranked per year, across the fandom's best years.
+    """
+    print("\n### Fandom Peak Amount Analysis (Top N Best Years) ###")
+
+    # 1. Calculate the number of unique ships per Fandom per Year (The Metric)
+    yearly_ship_counts = df.groupby(['Fandom', 'Year']).size().to_frame(name='Ships_Ranked')
+
+    # 2. Group by Fandom and get a sorted list of all yearly ship counts (descending)
+    # This gives us, for each fandom, a list of its yearly ship totals, sorted from best to worst.
+    fandom_ship_lists = yearly_ship_counts.groupby('Fandom')['Ships_Ranked'] \
+                                          .apply(lambda x: sorted(x.tolist(), reverse=True))
+
+    # Determine the max number of years any single fandom appeared (to set the loop limit)
+    max_recurrence = fandom_ship_lists.apply(len).max()
+
+    print(f"Max recurrence length found in data: {max_recurrence} years.")
+    
+    # List to store cumulative results for output
+    cumulative_results = []
+    
+    # 3. Iterate from N=1 up to max_recurrence
+    for n in range(1, max_recurrence + 1):
+        
+        # Sum the top N values from the sorted list for every fandom
+        # This calculates the peak cumulative ship count over the top N years
+        peak_n_ships = fandom_ship_lists.apply(lambda counts: sum(counts[:n]))
+        
+        # Sort and get the top 10 for the current N
+        top_n_fandoms = peak_n_ships.sort_values(ascending=False).head(10)
+
+        # Append the results for the summary table
+        cumulative_results.append({
+            'N_Years': f"Top {n} Year(s)",
+            'Top 1': top_n_fandoms.index[0] if len(top_n_fandoms) >= 1 else '-',
+            'Top 2': top_n_fandoms.index[1] if len(top_n_fandoms) >= 2 else '-',
+            'Total Ships (Top 1)': top_n_fandoms.iloc[0] if len(top_n_fandoms) >= 1 else 0
+        })
+
+        # Print detailed report for clarity
+        print(f"\n--- Top 10 Fandoms by CUMULATIVE Ships (Peak {n} Year(s)) ---")
+        print(peak_n_ships.sort_values(ascending=False).head(10))
         

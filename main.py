@@ -5,6 +5,8 @@ from process_data import (
     analyze_media_longevity, 
     analyze_overall_media_popularity,  
     analyze_yearly_media_popularity,
+    analyze_yearly_fandom_popularity,
+    analyze_peak_amount,
     OUTPUT_FILENAME,
 )
 from ship_graphs import (plot_ships_dip_to_edge,
@@ -44,6 +46,11 @@ def main():
     print("\n### Data Information (Data Types and Missing Values) ###")
     df.info()
 
+    ### num of unique ships overtime -----------------------------------------------
+    print("\n### Number of Unique Ships by Year ###")
+    unique_ships_by_year = df.groupby('Year')['Ship Name'].nunique()
+    print(unique_ships_by_year)
+
     ### most popular categories/medium ---------------------------------------------
     analyze_overall_media_popularity(df)
 
@@ -53,10 +60,9 @@ def main():
     ### yearly media popularity analysis ------------------------------------
     # analyze_yearly_media_popularity(df)
 
-    ### num of unique ships overtime -----------------------------------------------
-    print("\n### Number of Unique Ships by Year ###")
-    unique_ships_by_year = df.groupby('Year')['Ship Name'].nunique()
-    print(unique_ships_by_year)
+    ### fandoms -----------------------------------------------------------------------
+    analyze_yearly_fandom_popularity(df)
+    analyze_peak_amount(df)
     
     ### the most popular ship each year ---------------------------------------------
     print("\n### Rank 1 Ship Name for Each Year ###")

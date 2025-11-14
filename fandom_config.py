@@ -1,7 +1,7 @@
 # This just categorizes all the fandoms
 # Needs to be updated when encountering new fandoms
-FANDOM_CATEGORIES = {
-    # 2013
+FANDOM_CATEGORIES_BY_YEAR = [
+    { # 2013
     'All Time Low': 'Music/RPF',
     'Attack on Titan': 'Anime/Manga',
     'Castle': 'TV',
@@ -18,8 +18,8 @@ FANDOM_CATEGORIES = {
     'The Originals': 'TV',
     'The Vampire Diaries': 'Books/TV',
     'actors': 'RPF',
-
-    # 2014
+    },
+    {# 2014
     'Arrow': 'Comics/TV',
     'Attack on Titan': 'Anime/Manga',
     'Free!': 'Anime',
@@ -37,8 +37,8 @@ FANDOM_CATEGORIES = {
     'actors': 'RPF',
     'celebrities': 'RPF',
     'the Marvel universe': 'Comics/Movies/TV',
-
-    # 2015
+    },
+    {# 2015
     '5 Seconds of Summer': 'Music/RPF',
     'Arrow': 'Comics/TV',
     'Attack on Titan': 'Anime/Manga',
@@ -60,8 +60,8 @@ FANDOM_CATEGORIES = {
     'YouTubers': 'Internet/RPF',
     'actors': 'RPF',
     'the Marvel universe': 'Comics/Movies/TV',
-
-    # 2016
+    },
+    {# 2016
     'Arrow': 'Comics/TV',
     'Captain America: Civil war': 'Comics/Movies',
     'Fairy Tail': 'Anime/Manga',
@@ -79,8 +79,8 @@ FANDOM_CATEGORIES = {
     'The 100': 'TV',
     'Voltron: Legendary Defender': 'Animation',
     'YouTubers': 'Internet/RPF',
-
-    # 2017
+    },
+    {# 2017
     'BTS': 'Music/RPF',
     'Boku No Hero Academia': 'Anime/Manga',
     'Fairy Tail': 'Anime/Manga',
@@ -103,8 +103,8 @@ FANDOM_CATEGORIES = {
     'Yuri!!! on Ice': 'Anime',
     'actors': 'RPF',
     'the Harry Potter universe': 'Books/Movies',
-
-    # 2018
+    },
+    {# 2018
     'Adventure Time': 'Animation',
     'Agents of S.H.I.E.L.D.': 'Comics/TV',
     'Andi Mack': 'TV',
@@ -161,8 +161,8 @@ FANDOM_CATEGORIES = {
     'the Marvel universe': 'Comics/Movies/TV',
     'the Percy Jackson universe': 'Books/Movies',
     'the Star Wars universe': 'Movies/TV/Animation',
-
-    # 2019
+    },
+    {# 2019
     'Actors': 'RPF',
     'Adventure Time': 'Animation',
     'Amar a muerte': 'TV',
@@ -232,8 +232,8 @@ FANDOM_CATEGORIES = {
     'the Harry Potter universe': 'Books/Movies',
     'the Marvel universe': 'Comics/Movies/TV',
     'the Star Wars universe': 'Movies/TV/Animation',
-
-    # 2020
+    },
+    {# 2020
     '9-1-1': 'TV',
     '9-1-1: Lone Star': 'TV',
     'Ace Attorney': 'Video Games',
@@ -307,8 +307,8 @@ FANDOM_CATEGORIES = {
     'the Harry Potter universe': 'Books/Movies',
     'the Marvel universe': 'Comics/Movies/TV',
     'the Star Wars universe': 'Movies/TV/Animation',
-
-    # 2021
+    },
+    {# 2021
     '9-1-1': 'TV',
     '9-1-1: Lone Star': 'TV',
     'Ace Attorney': 'Video Games',
@@ -373,8 +373,8 @@ FANDOM_CATEGORIES = {
     'the Marvel universe': 'Comics/Movies/TV',
     'the Percy Jackson universe': 'Books/Movies',
     'the Star Wars universe': 'Movies/TV/Animation',
-
-    # 2022
+    },
+    {# 2022
     '9-1-1': 'TV',
     '9-1-1: Lone Star': 'TV',
     'Ace Attorney': 'Video Games',
@@ -441,8 +441,8 @@ FANDOM_CATEGORIES = {
     'the Marvel universe': 'Comics/Movies/TV',
     'the Percy Jackson universe': 'Books/Movies',
     'the Star Wars universe': 'Animation/Movies/TV',
-
-    # 2023
+    },
+    {# 2023
     '9-1-1': 'TV',
     '9-1-1: Lone Star': 'TV',
     'Ace Attorney': 'Video Games',
@@ -522,8 +522,8 @@ FANDOM_CATEGORIES = {
     'the Pokémon franchise': 'Anime/Video Games',
     'the Star Wars universe': 'Movies/TV/Animation',
     'the Super Mario Bros. franchise': 'Video Games',
-
-    # 2024
+    },
+    {# 2024
     '9-1-1': 'TV',
     'Ace Attorney': 'Video Games',
     'An Extremely Goofy Movie': 'Animation',
@@ -595,3 +595,17 @@ FANDOM_CATEGORIES = {
     'the Pokémon franchise': 'Anime/Video Games',
     'the Trolls franchise': 'Animation/Movies',
 }
+]
+
+def generate_master_config(config_list):
+    """
+    Combines all dictionaries in the list into a single dictionary.
+    Later entries overwrite earlier ones, ensuring corrections take precedence.
+    """
+    master_dict = {}
+    for config_dict in config_list:
+        master_dict.update(config_dict)
+    return master_dict
+
+# this is the dictionary other files use
+FANDOM_CATEGORIES = generate_master_config(FANDOM_CATEGORIES_BY_YEAR)
